@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(CUSTOMER)
+  bookings     Booking[]
+}
+
+model Service {
+  id          Int            @id @default(autoincrement())
+  name        String
+  durationMin Int
+  isActive    Boolean        @default(true)
+  hours       BusinessHour[]
+  bookings    Booking[]
+}
+
+model BusinessHour {
+  id        Int     @id @default(autoincrement())
+  serviceId Int
+  weekday   Int
+  openMin   Int
+  closeMin  Int
+  service   Service @relation(fields: [serviceId], references: [id])
+
+  @@unique([serviceId, weekday])
+}
+
+model Booking {
+  id        Int           @id @default(autoincrement())
+  userId    Int
+  serviceId Int
+  startsAt  DateTime      @db.Timestamptz(3)
+  endsAt    DateTime      @db.Timestamptz(3)
+  status    BookingStatus @default(CONFIRMED)
+  createdAt DateTime      @default(now()) @db.Timestamptz(3)
+  user      User          @relation(fields: [userId], references: [id])
+  service   Service       @relation(fields: [serviceId], references: [id])
+
+  @@index([userId, startsAt])
+  @@index([serviceId, startsAt])
+}

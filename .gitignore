@@ -1,0 +1,43 @@
+# =========================
+# Node.js / General
+# =========================
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+
+# =========================
+# Environment & Secrets
+# =========================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# =========================
+# Next.js Frontend
+# =========================
+# Build output directories
+.next/
+out/
+
+# Production cache
+.turbo/
+
+# =========================
+# Node.js Backend
+# =========================
+# Compiled output / dist directories (if using TypeScript or bundlers)
+dist/
+build/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Diagnostic files
+npm-debug.log*
+pnpm-debug.log*
